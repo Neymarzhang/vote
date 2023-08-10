@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <cal date="2023-2-10"></cal>
+    <cal></cal>
+</div>
+<script>
+    Vue.component("cal",{
+        props:{date:String},
+        template:`
+        <div>
+            年<select v-model="year" @change="dateObj=new Date(year,month,day)">
+                <option v-for="y in yearItems" :value="y">{{y}}年</option>
+            </select>
+            月<select v-model="month">
+                <option v-for="(m,i) in monthItems" :value="i">{{m}}</option>
+            </select>
+            日<select v-model="day">
+                <option v-for="d in dayItems" :value="d">{{d}}</option>
+            </select>
+            {{weekItems[dateObj.getDay()]}}
+        </div>
+        `,
+        data:function (){
+            return {
+                monthItems:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+                weekItems:["天","一","二","三","四","五","六"],
+                year:0,
+                month:0,
+                day:0,
+                dateObj:new Date()
+            }
+        },
+        created(){
+            if(this.date!=undefined){
+                var  strings=this.date.split(/\D+/);
+                this.dateObj.setFullYear(parseInt(strings[0]));
+                this.dateObj.setMonth(parseInt(strings[1])-1);
+                this.dateObj.setDate(parseInt(strings[2]));
+            }
+            this.year=this.dateObj.getFullYear();
+            this.month=this.dateObj.getMonth();
+            this.day=this.dateObj.getDate();
+        },
+        computed:{
+            yearItems(){
+                let ret=[this.year];
+                for(let i=0;i<5;i++){
+                    ret.push(this.year+i+1);
+                    ret.unshift(this.year-i-1);
+                }
+                return ret;
+            },
+            dayItems(){
+                let ret=[];
+                let isRun = this.year % 400 ==0 ||this.year % 4== 0 &&this.year%100!=0;
+                let nums=0;
+                switch (this.month+1){
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        nums=31;
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        nums=30
+                        break;
+                    default:
+                        nums=isRun? 29 :28;
+                }
+                for (let i=0;i<nums;i++){
+                    ret.push(i+1);
+                }
+                return ret;
+            }
+        },
+        watch:{
+            month(newValue,oldValue){
+                console.info(newValue,oldValue);
+                this.dateObj=new Date(this.year,this.month,this.day);
+            },day(newValue,oldValue){
+                console.info(newValue,oldValue);
+                this.dateObj=new Date(this.year,this.month,this.day);
+            }
+        }
+    })
+    var v=new Vue({
+        el:"#app",
+        data:{}
+    })
+</script>
+</body>
+</html>

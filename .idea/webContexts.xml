@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/index.html" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/login.html" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/page/在线人数统计.html" value="file://$PROJECT_DIR$/src/main/webapp/page" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/vue/component1.html" value="file://$PROJECT_DIR$/src/main/webapp/vue" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/vue/index.html" value="file://$PROJECT_DIR$/src/main/webapp/vue" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/vue/布局组件.html" value="file://$PROJECT_DIR$/src/main/webapp/vue" />
+      </map>
+    </option>
+  </component>
+</project>

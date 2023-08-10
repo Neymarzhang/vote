@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>穿梭框</title>
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+    <style>
+    *{
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+    }
+    ul{
+      border: 1px solid #666;
+      width: 100px;
+      height: 200px;
+      padding: 10px;
+      margin: 10px;
+    }
+    li:hover{
+      background-color: #eee;
+      cursor: pointer;
+    }
+    button{
+      min-width: 20px;
+    }
+  </style>
+</head>
+<body style="padding: 20px">
+<div id="app">
+    <h1>穿梭框</h1>
+    <div style="display: flex">
+        <ul>
+            <li v-for="h in leftHeroes">{{h.name}}</li>
+<!--            <li>吴用</li>-->
+<!--            <li>李逵</li>-->
+        </ul>
+        <div style="padding-top: 50px">
+            <button @click="lToR"><</button>
+            <br>
+            <button @click="rToL()">></button>
+            <br>
+            <button @click="allToLeft()"><<</button>
+            <br>
+            <button @click="allToRight()">>></button>
+        </div>
+        <ul>
+            <li v-for="h in rightHeroes">{{h.name}}</li>
+<!--            <li>林冲</li>-->
+        </ul>
+    </div>
+</div>
+
+<script>
+    var Hero = function (name, alias, p, i, a) {
+        this.name = name;
+        this.alias = alias;
+        this.p = p;
+        this.i = i;
+        this.a = a;
+    };
+    var v=new Vue({
+        el:"#app",
+        data:{
+            leftHeroes:[
+                new Hero("林冲", "豹子头", 99, 85, 90),
+                new Hero("武松", "行者", 98, 80, 88),
+                new Hero("秦明", "霹雳火", 95, 82, 85),
+                new Hero("白胜", "白日鼠", 75, 80, 85),
+                new Hero("石秀", "拼命三郎", 97, 82, 83)
+            ],
+            rightHeroes:[
+                new Hero("林冲", "豹子头", 99, 85, 90),
+                new Hero("武松", "行者", 98, 80, 88),
+                new Hero("秦明", "霹雳火", 95, 82, 85),
+                new Hero("白胜", "白日鼠", 75, 80, 85),
+                new Hero("石秀", "拼命三郎", 97, 82, 83)
+            ]
+        },
+        methods:{
+            rToL:function (){
+                if(this.leftHeroes.length>0)
+                    this.rightHeroes.push(this.leftHeroes.pop());
+            },
+            lToR:function (){
+                if(this.rightHeroes.length>0)
+                    this.leftHeroes.push(this.rightHeroes.pop());
+            },
+            allToLeft:function (){
+                if(this.rightHeroes.length>0){
+                    this.leftHeroes=this.leftHeroes.concat(this.rightHeroes);
+                    let length=this.rightHeroes.length;
+                    for(let i=0;i<length;i++){
+                        this.rightHeroes.pop();
+                    }
+                }
+            },
+            allToRight:function (){
+                if(this.leftHeroes.length>0){
+                    this.rightHeroes=this.rightHeroes.concat(this.leftHeroes);
+                    let length=this.leftHeroes.length;
+                    for(let i=0;i<length;i++){
+                        this.leftHeroes.pop();
+                    }
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

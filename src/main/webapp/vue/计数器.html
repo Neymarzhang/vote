@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+    }
+    .number{
+        display:inline-block;
+        border: 1px #ddd solid;
+    }
+    .number>*{
+        border: none;
+        text-align:center;
+    }
+    .number>button{
+        padding: 5px 10px;
+    }
+    .number>input{
+        width: 100px
+    }
+</style>
+<body>
+<div id="app">
+    <number :value="10" ref="a" @my-change="onChange"></number>
+    <button @click="alert($refs.a.value)">a.value的值</button>
+</div>
+<script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+<script>
+    Vue.component("number",{
+        props:{
+            value:Number,
+            step:{type:Number,default:1}
+        },
+        template:`
+        <div class="number">
+            <button @click="value-=step">-</button>
+            <input type="number" v-model="value">
+            <button @click="value+=step">+</button>
+        </div>
+        `,
+        created(){
+            console.info(this.$parent.code)
+        },
+        watch:{
+            value(newValue,oldValue){
+                console.info(newValue)
+                this.$emit("my-change",newValue)
+            }
+
+        }
+    })
+    var v=new Vue({
+        el:"#app",
+        data:{
+            code:100
+        },
+        methods:{
+            onChange(newValue){
+                alert(newValue);
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

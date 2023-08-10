@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <start v-model="s1"></start><h1>{{s1}}</h1>
+<!--    <start :value.sync="s2"></start><h1>{{s2}}</h1>-->
+<!--    <start :value.sync="s3"></start><h1>{{s3}}</h1>-->
+</div>
+<script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+<script>
+    Vue.component("start",{
+        props:["value"],
+        model:{
+            prop:"value",
+            event:"change"
+        },
+        template:`
+        <div>
+            <img v-for="i in 5" :src="i<=value?'images/star1.png':'images/star3.png'" @click="value=i">
+        </div>`,
+        watch:{
+            value(newValue){
+                this.$emit("change",newValue);
+                this.$emit("update:value",newValue);
+            }
+        }
+    })
+    var v=new Vue({
+        el:"#app",data:{
+            s1:2,
+            s2:3,
+            s3:5
+        }
+    })
+</script>
+</body>
+</html>

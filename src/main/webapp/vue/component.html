@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <form>
+        <label style="display: inline-block;width: 100px">用户名:</label><input><br>
+        <label style="display: inline-block;width: 100px">密 码:</label><input><br>
+        <my-input label="用户名"></my-input>
+        <my-input label="密码"></my-input>
+        <search></search>
+        <checkboxs :items="likes"></checkboxs>
+        <combo :items="heroes" select="白胜" display="alias" value="name"></combo>
+        <combo :items="heroes" select="武松" display="alias" value="name"></combo>
+        <combo :items="citys" select="0731" display="name" value="nums"></combo>
+    </form>
+</div>
+<script>
+    var Hero = function (name, alias, p, i, a) {
+        this.name = name;
+        this.alias = alias;
+        this.p = p;
+        this.i = i;
+        this.a = a;
+    };
+    var a=new Hero("林冲", "豹子头", 99, 85, 90);
+    Vue.component("myInput",{
+        template:`
+        <div>
+            <label style="display: inline-block;width: 100px">
+            {{label}}:
+            </label><input>
+        </div>
+        `,
+        props:["label"]
+    });
+    Vue.component("search",{
+        template: `
+        <div style="display:flex">
+            <input style="border-radius: 0;border-right: 0"><button style="border-radius-: 0;">搜索</button>
+        </div>
+        `
+    });
+    Vue.component("checkboxs",{
+        props: ["items"],
+        template:`
+        <div>
+            <span v-for="(item,i) in items">
+                <input type="checkbox" :id="'cbx'+i"><label :for="'cbx'+i">{{item}}</label>
+            </span>
+        </div>
+        `
+    })
+
+    Vue.component("combo",{
+        props:["items","select","display","value"],
+        template:`
+        <div>
+            <select>
+                <option v-for="item in items" :value="item[value]" :selected="select == item[value]">
+                    {{item[display]}}
+                </option>
+            </select>
+        </div>
+        `
+    })
+
+    var v=new Vue({
+        el:"#app",
+        data:{
+            likes:["看书","电影","唱歌","跳舞"],
+            heroes: [
+                new Hero("林冲", "豹子头", 99, 85, 90),
+                new Hero("武松", "行者", 98, 80, 88),
+                new Hero("秦明", "霹雳火", 95, 82, 85),
+                new Hero("白胜", "白日鼠", 75, 80, 85),
+                new Hero("石秀", "拼命三郎", 97, 82, 83)
+            ],
+            citys:[
+                {name:"衡阳",nums:"0734"},
+                {name:"长沙",nums:"0731"},
+                {name:"株洲",nums:"0732"},
+                {name:"湘潭",nums:"0733"}
+            ]
+        }
+    })
+</script>
+
+</body>
+</html>

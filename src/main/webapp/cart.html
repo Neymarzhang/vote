@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>购物车</title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/ajax.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body onload="showInCart()">
+<div id="app"><h3>购物车</h3>
+    <div class="clist">
+        <table>
+            <tbody>
+            <tr>
+                <th>图片</th>
+                <th>商品</th>
+                <th>价格</th>
+                <th>数量</th>
+                <th>小计</th>
+                <th>操作</th>
+            </tr>
+            <tr>
+                <td align="center">
+                    <img src="products/1/cs10008.jpg">
+                </td>
+                <td>
+                    <a target="_blank">秋冬季毛呢外套女中长款圆领小香风呢子大衣</a>
+                </td>
+                <td>￥336</td>
+                <td>
+                    <button>-</button>
+                    <span>5</span>
+                    <button>+</button>
+                </td>
+                <td width="140"><span>￥1680</span></td>
+                <td><a href="#" class="delete">删除</a></td>
+            </tr>
+            <tr>
+                <td id="tdSum" colspan="6" align="right"><label><label>合计金额</label>：<span id="money">￥0</span></label>
+                    <button onclick="location.href='shopping.html'">继续挑选</button>
+                    <button>提交订单</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    let showInCart=function (){
+        axios.get("showCart.s",null,res=>{
+            let list=res
+            let html=`<tr>
+                <th>图片</th>
+                <th>商品</th>
+                <th>价格</th>
+                <th>数量</th>
+                <th>小计</th>
+                <th>操作</th>
+            </tr>`
+            let sum=0;
+            list.forEach(map=>{
+                sum+=map.price*map.num;
+                var tr=`<tr>
+                    <td align="center"><img src=${map.src}></td>
+                    <td><a target="_blank">${map.goodsName}</a></td>
+                    <td>${map.price}</td>
+                    <td>
+                        <button onclick="addButton(this,-1)">-</button>
+                        <span>${map.num}</span>
+                        <button onclick="addButton(this,1)">+</button>
+                    </td>
+                    <td width="140"><span>${map.price*map.num}</span></td>
+                    <td><a href="#" class="delete">删除</a></td>
+                </tr>`;
+                html+=tr;
+            })
+            html+=`<tr>
+                <td id="tdSum" colspan="6" align="right"><label><label>合计金额</label>：<span id="money">${"￥"+sum}</span></label>
+                    <button onclick="location.href='shopping.html'">继续挑选</button>
+                    <button>提交订单</button>
+                </td>
+            </tr>`
+            let tb=$('table>tbody').eq(0);
+            tb.empty();
+            tb.append($(html))
+        });
+    }
+    let addButton=function (b,count){
+        let picture=b.parentElement.parentElement.querySelector('img').src;
+        axios.get("addCart.s",{
+            params:{
+                src:picture,
+                nums:count
+            }
+        },res=>{
+            showInCart();
+        });
+
+    }
+</script>
+</body>
+</html>

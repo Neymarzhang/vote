@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<input type="file" id="file" accept="image/*" onchange="upload()">
+<button onclick="upload()">上传文件</button>
+<hr>
+<img src="images/empty.png" onclick="file.click()" id="head">
+<script>
+    function upload(){
+        if(file.files.length==0){
+            alert("请选择上传的文件")
+            return;
+        }
+        let  fd=new FormData();
+        fd.append("image",file.files[0]);
+
+        axios.post("upload.s",fd).then(function (res){
+            alert(res.data.msg+":"+res.data.data);
+            head.src=res.data.data;
+        });
+    }
+</script>
+</body>
+</html>

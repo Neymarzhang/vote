@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <date-format :date="new Date()">
+        <template #default="a">
+            {{a.year}}年{{a.month}}月{{a.dates}}日
+        </template>
+    </date-format>
+</div>
+<script>
+    Vue.component("dateFormat",{
+        props:["date"],
+        template:`
+        <span>
+            <slot :year="date.getFullYear()" :month="date.getMonth()" :dates="date.getDate()">
+            {{date}}
+            </slot>
+        </span>
+        `
+    })
+    var v=new Vue({
+        el:"#app"
+    })
+</script>
+</body>
+</html>
+
+<!--
+    1.组件通信
+        (1 设置自定义组件的属性ref的值后，外界可通过$refs.(ref).(属性名)获取属性值
+        (2 watch:自定义组件事件 $emit(参数一)
+-->

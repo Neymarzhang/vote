@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+商品名称:<input>
+商品分类:<input>
+<button onclick="query()">查询</button>
+
+<table id="tbl" border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>编号</th><th>名称</th><th>图片</th>
+    </tr>
+</table>
+<div>
+    <span>首页</span>
+    <span>上一页</span>
+    <label id="pages"></label>
+    <span>下一页</span>
+    <span>尾页</span>
+</div>
+<script>
+    function query(page){
+        page=page||1;
+        axios.get("queryProduct.s",{
+            params:{
+                page:page,
+                size:5
+            }
+        }).then(res=>{
+            tbl.innerHTML="<tr><th>编号</th><th>名称</th><th>图片</th></tr>";
+            res.data.rows.forEach(p=>{
+                let html=`<tr>
+                          <td>${p.pid}</td>
+                          <td>${p.pname}</td>
+                          <td><img src="${p.image}" alt="" height="100px"></img></td></tr>`;
+                tbl.innerHTML+=html;
+            })
+            let total=parseInt(res.data.total);
+            let page=parseInt(total/5);
+            page+=(total%5==0)?0:1;
+            $("#pages").empty();
+            console.info(res.data.total);
+            for (let i = 0; i < page; i++) {
+                pages.innerHTML+=`<span onclick="query(${i+1})">${i+1}</span>`
+            }
+        })
+    }
+</script>
+</body>
+</html>
+<style>
+    table{
+        margin-block: 100px;
+        width: 100%;
+    }
+    input{
+        width: 100px;
+    }
+    div{
+        text-align: center;
+    }
+    div span{
+        display: inline-block;
+        background-color: #ddd;
+        border: 1px #aaa solid;
+        padding: 5px 10px;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+    div span:hover{
+        background-color: #999;
+    }
+</style>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .main{
+        width: 1000px;
+        height: 1200px;
+        background-color: #eeeeee;
+        padding: 50px;
+    }
+    header{
+        height: 50px;
+        border-top: 1px #aaaaaa solid;
+        border-bottom: 1px #aaaaaa solid;
+        overflow: hidden;
+        transition: height 0.5s;
+        cursor: pointer;
+    }
+    .msg{
+        margin: 0;
+        cursor: pointer;
+    }
+</style>
+<body>
+
+<div id="app" style="display: flex;flex-direction: column;align-items: center">
+    <div class="main">
+    <flod :items="massage1">
+        <template v-slot:title>
+            一致性 Consistency
+        </template>
+    </flod>
+        <flod :items="massage2">
+            <template v-slot:title>
+                反馈 Feedback
+            </template>
+        </flod>
+        <flod :items="massage3">
+            <template v-slot:title>
+                效率 Efficiency
+            </template>
+        </flod>
+        <flod :items="massage4">
+            <template v-slot:title>
+                可控 Controllability
+            </template>
+        </flod>
+    </div>
+</div>
+<script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+<script>
+    var massage1=["与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；","在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。"]
+    var massage2=["控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；","页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。"]
+    var massage3=["简化流程：设计简洁直观的操作流程；","清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；","帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。"]
+    var massage4=["用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；","结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。"]
+    Vue.component("flod",{
+        props:["items"],
+        template:`
+
+            <header :style="isOpen">
+                <p style="display: flex;justify-content: space-between" @click="height=!height">
+                    <main>
+                        <slot name="title">
+                        请设置主题
+                        </slot>
+                    </main>
+                    <main>{{height==false? ">" : "v"}}</main></p>
+                <p class="msg" v-for="item in items" @click="height=!height">
+                    {{item}}
+                </p>
+            </header>
+
+        `,
+        data(){
+            return {
+                height:false,
+            }
+        },
+        computed:{
+            isOpen:function (){
+                if(this.height){
+                    return "height: "+this.items.length*50+"px";
+                }else {
+                    return "height: 50px"
+                }
+            }
+        }
+    })
+    var v=new Vue({
+        el:"#app"
+    })
+</script>
+</body>
+</html>

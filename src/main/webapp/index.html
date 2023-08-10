@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/ajax.js"></script>
+</head>
+<body>
+Hello 中国
+<form action="login.s" method="post">
+    账号:<input name="username"><br>
+    密码:<input name="password" type="password"><br>
+    <button>登录</button>
+</form>
+
+<hr>
+<form action="add.s" method="get"><br>
+    账号:<input name="a" id="a" type="number"><br>
+    密码:<input name="b" id="b" type="number"><br>
+    结果:<span name="c" id="c"></span><br>
+    <button>表单方式(同步方式)提交</button>
+    <button type="button" onclick="add()">AJAX方式(异步方式)提交</button>
+    <button type="button" onclick="add1()">AJAX方式(封装方式)提交</button>
+</form>
+<script>
+    var ajax;
+    if(window.XMLHttpRequest){
+        ajax=new XMLHttpRequest();
+    }else {
+        ajax=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    function add(){
+        ajax.onreadystatechange=function (){
+            console.info(ajax.readyState, ajax.status);
+            if(ajax.readyState==4 && ajax.status==200){
+                c.innerText = ajax.responseText;
+            }
+        }
+        let url="add.s?";
+        if(a.value){
+            url+="a="+a.value;
+        }
+        if(b.value){
+            url+="&b="+b.value;
+        }
+        ajax.open("get",url);
+        ajax.send(null);
+    }
+    function  add1(){
+        axios.get("add.s",{
+            params:{
+                a:a.value,
+                b:b.value
+            }
+        },function (responseText){
+            c.innerText=responseText;
+        });
+    }
+</script>
+<hr>
+<button onclick="queryPerson()">查询用户信息</button>
+<div id="person">
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><td>id</td><td>姓名</td><td>年龄</td></tr>
+    </table>
+</div>
+<script>
+    function queryPerson(){
+    axios.get("findPerson.s",null,res=>{
+        var list=res;
+        var html="";
+        list.forEach(person=>{
+            var tr=`<tr><td>${person.id || ''}</td>
+                        <td>${person.name ||''}</td>
+                            <td>${person.age || ''}</td><tr>`;
+            html+=tr;
+
+        })
+        var th=person.children[0].children[0].outerHTML;
+        person.children[0].innerHTML=th;
+
+        person.children[0].innerHTML+=html;
+    })
+    }
+</script>
+<hr>
+<h3>添加用户</h3>
+<div style="display: grid;grid-template-columns: 100px 150px;grid-gap: 10px">
+    id:<input id="pId">
+    姓名:<input id="pName">
+    年龄:<input id="age">
+    <span></span><button onclick="addPerson()">添加用户</button>
+</div>
+<script>
+    function addPerson(){
+        axios.get("AddPerson.s",{
+            params: {
+                id:pId.value,
+                name:pName.value,
+                age:age.value
+            }
+        },res=>{
+            alert(res.msg)
+            if(res.code==1){
+                queryPerson()
+            }
+        })
+    }
+</script>
+</body>
+</html>
